@@ -133,8 +133,8 @@ const HomePage: React.FC = () => {
           </ContentItem>
         )}
         {showLoginBtn && (
-          <BtnBlock onClick={() => userLogin()}>
-            <Button label="sign in" />
+          <BtnBlock>
+            <Button onClick={() => userLogin()}>sign in</Button>
           </BtnBlock>
         )}
         {!isEmpty(errorMsg) && <ErrorMsg>{errorMsg}</ErrorMsg>}

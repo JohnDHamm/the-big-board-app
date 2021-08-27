@@ -7,7 +7,9 @@ export default {
   component: Button,
 };
 
-export const Default = () => <Button label="sign in" />;
-export const AltStyle = () => <Button label="alternate" alternate={true} />;
+const handleClick = () => console.log('Button clicked');
 
-export const CustonWidth = () => <Button label="sign in" width="50%" />;
+export const Default = () => <Button onClick={handleClick}>sign in</Button>;
+export const AltStyle = () => <Button alternate={true} onClick={handleClick}>alternate</Button>;
+export const CustonWidth = () => <Button width="50%" onClick={handleClick}>sign in</Button>;
+export const Disabled = () => <Button onClick={handleClick} disabled>disabled</Button>;
