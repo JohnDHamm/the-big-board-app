@@ -22,8 +22,8 @@ const CommishModal: React.FC<CommishModal> = ({
       </Title>
       <Status>{status}</Status>
       <Message>{message}</Message>
-      <ActionWrapper onClick={onActionCall}>
-        <Button label="please restart app" />
+      <ActionWrapper>
+        <Button onClick={onActionCall}>please restart app</Button>
       </ActionWrapper>
     </Container>
   ) : null;

@@ -1,17 +1,30 @@
 import React from 'react';
-import { Container, Label } from './Button.styles';
+import { StyledButton } from './Button.styles';
 
 interface Props {
-  label: string;
-  width?: string;
   alternate?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+  width?: string;
 }
 
-const Button: React.FC<Props> = ({ label, width, alternate = false }) => {
+const Button: React.FC<Props> = ({
+  alternate = false,
+  children,
+  disabled = false,
+  onClick,
+  width
+}) => {
   return (
-    <Container width={width} alternate={alternate}>
-      <Label alternate={alternate}>{label}</Label>
-    </Container>
+    <StyledButton
+      alternate={alternate}
+      disabled={disabled}
+      onClick={disabled ? () => null : onClick}
+      type='button'
+      width={width}
+    >
+      {children}
+    </StyledButton>
   );
 };
 

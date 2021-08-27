@@ -30,14 +30,10 @@ const PickConfirmModal: React.FC<PickConfirmModal> = ({
         <Logo team={team.abbv} />
         <ButtonBlock>
           <ButtonWrapper>
-            <div onClick={onCancel}>
-              <Button label="CANCEL" alternate={true}></Button>
-            </div>
+            <Button onClick={onCancel} alternate={true}>CANCEL</Button>
           </ButtonWrapper>
           <ButtonWrapper>
-            <div onClick={onConfirm}>
-              <Button label="CONFIRM"></Button>
-            </div>
+            <Button onClick={onConfirm}>CONFIRM</Button>
           </ButtonWrapper>
         </ButtonBlock>
       </Container>

@@ -43,9 +43,9 @@ const MorePage: React.FC = () => {
       left={<div></div>}
       center={
         <MobileContentContainer>
-          <div onClick={() => logout()}>
-            <Button label="log out" />
-          </div>
+          <ButtonWrapper>
+            <Button onClick={() => logout()}>log out</Button>
+          </ButtonWrapper>
           {user?.isCommish && (
             <CommishBlock>
               <Welcome>Hello Commish!</Welcome>
@@ -55,18 +55,18 @@ const MorePage: React.FC = () => {
                 onTextChange={(text) => setMessage(text)}
               />
               {draftStatus === 'not started' && (
-                <ButtonWrapper onClick={() => handleStartDraft()}>
-                  <Button label="start draft" />
+                <ButtonWrapper >
+                  <Button onClick={() => handleStartDraft()}>start draft</Button>
                 </ButtonWrapper>
               )}
               {draftStatus === 'open' && (
-                <ButtonWrapper onClick={() => handlePauseDraft()}>
-                  <Button label="pause draft" />
+                <ButtonWrapper >
+                  <Button onClick={() => handlePauseDraft()}>pause draft</Button>
                 </ButtonWrapper>
               )}
               {draftStatus === 'paused' && (
-                <ButtonWrapper onClick={() => handleReopenDraft()}>
-                  <Button label="re-open draft" />
+                <ButtonWrapper >
+                  <Button onClick={() => handleReopenDraft()}>re-open draft</Button>
                 </ButtonWrapper>
               )}
             </CommishBlock>

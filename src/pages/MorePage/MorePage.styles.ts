@@ -14,4 +14,5 @@ export const Welcome = styled.p`
 
 export const ButtonWrapper = styled.div`
   margin: 1rem 0;
+  text-align: center;
 `;

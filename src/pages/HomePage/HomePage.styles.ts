@@ -28,6 +28,7 @@ export const Content = styled.div`
   flex: 0.85;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   @media screen and (${SCREEN_WIDTHS.MOBILE}) {
     width: 90%;
   }
@@ -55,7 +56,8 @@ export const ContentItem = styled.div`
 
 export const BtnBlock = styled.div`
   margin-top: 2rem;
-  width: auto;
+  width: 100%;
+  text-align: center;
 `;
 
 export const ErrorMsg = styled.p`
