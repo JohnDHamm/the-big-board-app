@@ -27,6 +27,10 @@ export const NavBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const NavIconBlock = styled.div`
