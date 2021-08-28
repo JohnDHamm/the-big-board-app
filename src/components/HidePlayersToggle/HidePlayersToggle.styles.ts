@@ -20,6 +20,10 @@ export const Toggle = styled.div<{ active: boolean }>`
     props.active ? COLORS.PRIMARY_GREEN : COLORS.WHITE};
   padding: 2px;
   background-clip: content-box;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Text = styled.p`
