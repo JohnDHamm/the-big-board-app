@@ -17,7 +17,7 @@ import { UserContext } from '../../contexts';
 import { getLeaguesList, login } from '../../api';
 import { socket } from '../../sockets/SocketListener/SocketListener';
 import isEmpty from 'lodash.isempty';
-import { LOCAL_STORAGE } from '../../constants';
+import { LOCAL_STORAGE, TEST_LEAGUE_IDS } from '../../constants';
 
 const HomePage: React.FC = () => {
   const { user, setCurrentUser } = React.useContext(UserContext);
@@ -42,9 +42,18 @@ const HomePage: React.FC = () => {
 
   const getSelectOptions = (): string[] => {
     const options: string[] = [];
-    leagues.forEach((league: LeagueListItem) => {
-      options.push(league.name);
-    });
+    const filteredLeagues: LeagueListItem[] = leagues.filter(
+      (league) => !TEST_LEAGUE_IDS.includes(league._id)
+    );
+    if (process.env.NODE_ENV !== 'development') {
+      filteredLeagues.forEach((league: LeagueListItem) => {
+        options.push(league.name);
+      });
+    } else {
+      leagues.forEach((league: LeagueListItem) => {
+        options.push(league.name);
+      });
+    }
     return options;
   };
 
