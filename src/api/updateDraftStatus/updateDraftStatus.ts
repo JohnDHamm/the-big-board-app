@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_ROOT_URL } from '../index';
+import { createAuthenticationHeaders } from '../helpers';
 
 export const updateDraftStatus = async (
   leagueId: string,
@@ -10,7 +11,8 @@ export const updateDraftStatus = async (
       `${API_ROOT_URL}/draft_status/${leagueId}`,
       {
         draftStatus,
-      }
+      },
+      createAuthenticationHeaders()
     );
     return data;
   } catch (err) {

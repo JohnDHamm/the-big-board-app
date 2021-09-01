@@ -17,6 +17,7 @@ import { UserContext } from '../../contexts';
 import { getLeaguesList, login } from '../../api';
 import { socket } from '../../sockets/SocketListener/SocketListener';
 import isEmpty from 'lodash.isempty';
+import { LOCAL_STORAGE } from '../../constants';
 
 const HomePage: React.FC = () => {
   const { user, setCurrentUser } = React.useContext(UserContext);
@@ -25,9 +26,8 @@ const HomePage: React.FC = () => {
   const [leagues, setLeagues] = React.useState<LeagueListItem[]>([]);
   const [selectedLeagueId, setSelectedLeagueId] = React.useState<string>('');
   const [showNameInput, setShowNameInput] = React.useState<boolean>(false);
-  const [showPasswordInput, setShowPasswordInput] = React.useState<boolean>(
-    false
-  );
+  const [showPasswordInput, setShowPasswordInput] =
+    React.useState<boolean>(false);
   const [showLoginBtn, setShowLoginBtn] = React.useState<boolean>(false);
   const [name, setName] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
@@ -73,6 +73,10 @@ const HomePage: React.FC = () => {
       try {
         const loggedInUser: User = await login(newUser);
         if (loggedInUser) {
+          localStorage.setItem(
+            LOCAL_STORAGE.JWT_TOKEN,
+            loggedInUser.accessToken
+          );
           setCurrentUser(loggedInUser);
           socket.emit('JoinRoom', loggedInUser.leagueId);
           history.push(ROUTES.APP);
