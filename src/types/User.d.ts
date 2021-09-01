@@ -3,6 +3,7 @@ interface Owner {
   name: string;
   leagueId: string;
   isCommish: boolean;
+  accessToken: string;
 }
 
 type User = Owner | null;
