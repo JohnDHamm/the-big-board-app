@@ -16,3 +16,10 @@ export const ButtonWrapper = styled.div`
   margin: 1rem 0;
   text-align: center;
 `;
+
+export const StatusMessage = styled.p<{ statusError: boolean }>`
+  font-family: ${FONTS.NAMES};
+  font-size: 1.25rem;
+  text-align: center;
+  color: ${(props) => (props.statusError ? COLORS.ERR : COLORS.SUCCESS)};
+`;
