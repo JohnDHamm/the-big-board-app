@@ -1,6 +1,7 @@
 import React from 'react';
 import socketIOClient from 'socket.io-client';
 import {
+  ActiveOwnersContext,
   AlertContext,
   CommishModalContext,
   CurrentPickContext,
@@ -19,18 +20,20 @@ import { DURATIONS } from '../../styles';
 import { COMMISH_MODAL_INITIAL_VALUE } from '../../contexts/CommishModalContext/CommishModalContext';
 import { PICKISIN_MODAL_INITIAL_VALUE } from '../../contexts/PickIsInModalContext/PickIsInModalContext';
 import { PICKCONFIRM_MODAL_INITIAL_VALUE } from '../../contexts/PickConfirmModalContext/PickConfirmModalContext';
+import { answerPing } from '../../api';
 
 const ROOT_URL = process.env.REACT_APP_API_URL || 'http://localhost:4001';
 export const socket = socketIOClient(ROOT_URL);
 
 const SocketListener: React.FC = ({ children }) => {
+  const { activeOwners, setCurrentActiveOwners } =
+    React.useContext(ActiveOwnersContext);
   const { alert, setCurrentAlert } = React.useContext(AlertContext);
   const { user, setCurrentUser } = React.useContext(UserContext);
   const { setCurrentDraftPick } = React.useContext(CurrentPickContext);
   const { draft } = React.useContext(DraftContext);
-  const { draftStatus, setCurrentDraftStatus } = React.useContext(
-    DraftStatusContext
-  );
+  const { draftStatus, setCurrentDraftStatus } =
+    React.useContext(DraftStatusContext);
   const { picks, setCurrentPicks } = React.useContext(PicksContext);
   const { players, setCurrentPlayers } = React.useContext(PlayersContext);
   const { teams } = React.useContext(TeamsContext);
@@ -77,6 +80,17 @@ const SocketListener: React.FC = ({ children }) => {
       return owner ? owner.name : '';
     },
     [draft]
+  );
+
+  const updateActiveOwners = React.useCallback(
+    (ownerId) => {
+      if (!activeOwners.includes(ownerId)) {
+        const updatedActiveOwners: string[] = Array.from(activeOwners);
+        updatedActiveOwners.push(ownerId);
+        setCurrentActiveOwners(updatedActiveOwners);
+      }
+    },
+    [activeOwners, setCurrentActiveOwners]
   );
 
   React.useEffect(() => {
@@ -153,6 +167,17 @@ const SocketListener: React.FC = ({ children }) => {
     return () => socket.disconnect();
   }, []);
 
+  React.useEffect(() => {
+    socket.on('disconnect', () => {
+      console.log(`Socket disconnected!!!!!!!!`);
+      setCurrentAlert({
+        message: 'Connection lost! Reload app.',
+        type: 'err',
+        sticky: true,
+      });
+    });
+  }, [setCurrentAlert]);
+
   React.useEffect((): any => {
     socket.on('PickMade', (pick: DraftSelection) => {
       // console.log('pick made', pick);
@@ -174,6 +199,7 @@ const SocketListener: React.FC = ({ children }) => {
     setCurrentPickIsInModal,
   ]);
 
+  //TODO: investigate if the onActionCall is enough to get user restarted - may need to ask user to reload app to be current
   React.useEffect((): any => {
     socket.on('DraftStarted', (message: string) => {
       const newModal: CommishModal = {
@@ -227,6 +253,24 @@ const SocketListener: React.FC = ({ children }) => {
       setCurrentDraftStatus(status);
     });
   }, [setCurrentDraftStatus]);
+
+  React.useEffect((): any => {
+    socket.on('PingOwner', () => {
+      console.log(`owner ping received`);
+      if (user) {
+        answerPing(user?.leagueId, user?._id)
+          .then((res) => console.log(`res`, res))
+          .catch((err) => console.log(`err`, err));
+      }
+    });
+  }, [user]);
+
+  React.useEffect((): any => {
+    socket.on('OwnerPingAnswer', (ownerId: string) => {
+      console.log(`owner ping answer`, ownerId);
+      updateActiveOwners(ownerId);
+    });
+  }, [updateActiveOwners]);
 
   React.useEffect(() => {
     // console.log('draftStatus change', draftStatus);
