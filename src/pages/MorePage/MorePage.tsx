@@ -6,26 +6,38 @@ import {
   Welcome,
 } from './MorePage.styles';
 import {
+  ActiveOwnersContext,
   CurrentPickContext,
+  DraftContext,
   DraftStatusContext,
   UserContext,
 } from '../../contexts';
-import { Button, Input } from '../../components';
-import { getPicks, pauseDraft, reopenDraft, startDraft } from '../../api';
+import { Button, Input, OwnersStatus } from '../../components';
+import {
+  getPicks,
+  pauseDraft,
+  pingOwners,
+  reopenDraft,
+  startDraft,
+} from '../../api';
 import { ThreeUpLayout, MobileContentContainer } from '../layouts';
 
 const MorePage: React.FC = () => {
   const { user, setCurrentUser } = React.useContext(UserContext);
   const { currentDraftPick } = React.useContext(CurrentPickContext);
   const { draftStatus } = React.useContext(DraftStatusContext);
+  const { draft } = React.useContext(DraftContext);
+  const { activeOwners, setCurrentActiveOwners } =
+    React.useContext(ActiveOwnersContext);
   const [commishMessage, setCommishMessage] = React.useState<string>('');
   const [statusMessage, setStatusMessage] = React.useState<string>('');
   const [statusError, setStatusError] = React.useState<boolean>(false);
 
-  const logout = (): void => {
-    setCurrentUser(null);
-    //TODO: need to clear modals? see SocketListener 163?
-  };
+  //TODO: investigate what log out functionality should be
+  // const logout = (): void => {
+  //   setCurrentUser(null);
+  //   //TODO: need to clear modals? see SocketListener 163?
+  // };
 
   const checkAppStatus = () => {
     if (user) {
@@ -35,7 +47,9 @@ const MorePage: React.FC = () => {
           setStatusMessage("You are up to date. Keep on draftin'!");
           setStatusError(false);
         } else {
-          setStatusMessage('Uh oh, something went wrong, please log out.');
+          setStatusMessage(
+            'Uh oh, something went wrong, please reload the app.'
+          );
           setStatusError(true);
         }
       });
@@ -66,14 +80,23 @@ const MorePage: React.FC = () => {
     }
   };
 
+  const handlePingButtonClick = () => {
+    if (user) {
+      setCurrentActiveOwners([]);
+      pingOwners(user?.leagueId)
+        .then((res) => null)
+        .catch((err) => console.log('err', err));
+    }
+  };
+
   return (
     <ThreeUpLayout
       left={<div></div>}
       center={
         <MobileContentContainer>
-          <ButtonWrapper>
+          {/* <ButtonWrapper>
             <Button onClick={() => logout()}>log out</Button>
-          </ButtonWrapper>
+          </ButtonWrapper> */}
           <ButtonWrapper>
             <Button onClick={() => checkAppStatus()}>check app status</Button>
           </ButtonWrapper>
@@ -111,6 +134,11 @@ const MorePage: React.FC = () => {
                   </Button>
                 </ButtonWrapper>
               )}
+              <OwnersStatus
+                owners={draft.owners}
+                activeOwners={activeOwners}
+                onButtonPress={handlePingButtonClick}
+              />
             </CommishBlock>
           )}
         </MobileContentContainer>
