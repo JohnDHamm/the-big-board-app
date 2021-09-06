@@ -18,6 +18,7 @@ import MyPlayerCard from './MyPlayerCard/MyPlayerCard';
 import MyTeamPositionBlock from './MyTeamPositionBlock/MyTeamPositionBlock';
 import NavBar from './NavBar/NavBar';
 import NavIcon from './NavIcon/NavIcon';
+import OwnersStatus from './OwnersStatus/OwnersStatus';
 import PickCard from './PickCard/PickCard';
 import PickConfirmModal from './PickConfirmModal/PickConfirmModal';
 import PickIsInModal from './PickIsInModal/PickIsInModal';
@@ -50,6 +51,7 @@ export {
   MyTeamPositionBlock,
   NavBar,
   NavIcon,
+  OwnersStatus,
   PickCard,
   PickConfirmModal,
   PickIsInModal,
