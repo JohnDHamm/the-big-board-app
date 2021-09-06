@@ -3,10 +3,13 @@ interface Owner {
   name: string;
   leagueId: string;
   isCommish: boolean;
+}
+
+interface AccessToken {
   accessToken: string;
 }
 
-type User = Owner | null;
+type User = (Owner & AccessToken) | null;
 
 interface Password {
   password: string;
